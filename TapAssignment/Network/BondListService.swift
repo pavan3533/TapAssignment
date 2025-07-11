@@ -7,17 +7,10 @@
 
 import Foundation
 
-class BondService {
+final class BondListService {
+    private let url = URL(string: "https://eol122duf9sy4de.m.pipedream.net")!
 
-    static let shared = BondService()
-    private let urlString = "https://eol122duf9sy4de.m.pipedream.net"
-
-    func fetchBonds(completion: @escaping (Result<[Bond], Error>) -> Void) {
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "Invalid URL", code: 0)))
-            return
-        }
-
+    func fetchBondList(completion: @escaping (Result<[BondListItem], Error>) -> Void) {
         let task = URLSession.shared.dataTask(with: url) { data, _, error in
             if let error = error {
                 completion(.failure(error))
@@ -25,18 +18,17 @@ class BondService {
             }
 
             guard let data = data else {
-                completion(.failure(NSError(domain: "No Data", code: 0)))
+                completion(.failure(NSError(domain: "data_nil", code: 1)))
                 return
             }
 
             do {
-                let response = try JSONDecoder().decode(BondResponse.self, from: data)
-                completion(.success(response.data))
+                let root = try JSONDecoder().decode([String: [BondListItem]].self, from: data)
+                completion(.success(root["data"] ?? []))
             } catch {
                 completion(.failure(error))
             }
         }
-
         task.resume()
     }
 }

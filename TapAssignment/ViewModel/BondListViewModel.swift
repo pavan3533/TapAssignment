@@ -8,35 +8,46 @@
 import Foundation
 
 protocol BondListViewModelDelegate: AnyObject {
-    func didLoadBonds()
-    func didFailWithError(_ message: String)
+    func didUpdateList()
+    func didFailWithError(_ error: Error)
 }
 
-class BondListViewModel {
-
+final class BondListViewModel {
+    private let service = BondListService()
+    private(set) var bonds: [BondListItem] = []
     weak var delegate: BondListViewModelDelegate?
-    private(set) var bonds: [Bond] = []
+
+    var searchQuery: String = "" {
+        didSet {
+            applySearchFilter()
+        }
+    }
+
+    private var allBonds: [BondListItem] = []
 
     func fetchBonds() {
-        BondService.shared.fetchBonds { [weak self] result in
+        service.fetchBondList { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let bonds):
-                    self?.bonds = bonds
-                    self?.delegate?.didLoadBonds()
+                    self?.allBonds = bonds
+                    self?.applySearchFilter()
                 case .failure(let error):
-                    self?.delegate?.didFailWithError(error.localizedDescription)
+                    self?.delegate?.didFailWithError(error)
                 }
             }
         }
     }
 
-    func bond(at index: Int) -> Bond {
-        return bonds[index]
-    }
-
-    var count: Int {
-        return bonds.count
+    private func applySearchFilter() {
+        if searchQuery.isEmpty {
+            bonds = allBonds
+        } else {
+            bonds = allBonds.filter {
+                $0.companyName.localizedCaseInsensitiveContains(searchQuery) ||
+                $0.isin.localizedCaseInsensitiveContains(searchQuery)
+            }
+        }
+        delegate?.didUpdateList()
     }
 }
-

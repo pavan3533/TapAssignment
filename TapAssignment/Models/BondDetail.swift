@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BondDetail: Codable {
+struct BondDetail: Decodable {
     let logo: String
     let companyName: String
     let description: String
@@ -18,33 +18,29 @@ struct BondDetail: Codable {
     let issuerDetails: IssuerDetails
 
     enum CodingKeys: String, CodingKey {
-        case logo
+        case logo, description, isin, status, financials
         case companyName = "company_name"
-        case description
-        case isin
-        case status
         case prosAndCons = "pros_and_cons"
-        case financials
         case issuerDetails = "issuer_details"
     }
 }
 
-struct ProsAndCons: Codable {
+struct ProsAndCons: Decodable {
     let pros: [String]
     let cons: [String]
 }
 
-struct Financials: Codable {
-    let ebitda: [MonthValue]
-    let revenue: [MonthValue]
+struct Financials: Decodable {
+    let ebitda: [MonthlyData]
+    let revenue: [MonthlyData]
 }
 
-struct MonthValue: Codable {
+struct MonthlyData: Decodable {
     let month: String
     let value: Double
 }
 
-struct IssuerDetails: Codable {
+struct IssuerDetails: Decodable {
     let issuerName: String
     let typeOfIssuer: String
     let sector: String
@@ -58,8 +54,7 @@ struct IssuerDetails: Codable {
     enum CodingKeys: String, CodingKey {
         case issuerName = "issuer_name"
         case typeOfIssuer = "type_of_issuer"
-        case sector
-        case industry
+        case sector, industry
         case issuerNature = "issuer_nature"
         case cin
         case leadManager = "lead_manager"

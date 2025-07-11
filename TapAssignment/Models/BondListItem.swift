@@ -7,11 +7,7 @@
 
 import Foundation
 
-struct BondResponse: Codable {
-    let data: [Bond]
-}
-
-struct Bond: Codable {
+struct BondListItem: Decodable {
     let logo: String
     let isin: String
     let rating: String
@@ -19,10 +15,7 @@ struct Bond: Codable {
     let tags: [String]
 
     enum CodingKeys: String, CodingKey {
-        case logo
-        case isin
-        case rating
+        case logo, isin, rating, tags
         case companyName = "company_name"
-        case tags
     }
 }

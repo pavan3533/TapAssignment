@@ -27,7 +27,7 @@ class BondListViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(BondTableViewCell.self, forCellReuseIdentifier: "BondCell")
+        tableView.register(BondCell.self, forCellReuseIdentifier: "BondCell")
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -55,7 +55,7 @@ extension BondListViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BondCell", for: indexPath) as! BondTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BondCell", for: indexPath) as! BondCell
         let bond = viewModel.bond(at: indexPath.row)
         cell.configure(with: bond)
         return cell
