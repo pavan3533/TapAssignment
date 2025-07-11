@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BondTableViewCell: UITableViewCell {
+class BondCell: UITableViewCell {
 
     private let logoImageView = UIImageView()
     private let nameLabel = UILabel()
