@@ -23,6 +23,9 @@
 		70944D922E20319F00526319 /* BondListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70944D912E20319F00526319 /* BondListViewController.swift */; };
 		70944D952E20365700526319 /* BondTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70944D942E20365700526319 /* BondTableViewCell.swift */; };
 		70944D972E2038B100526319 /* BondDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70944D962E2038B100526319 /* BondDetail.swift */; };
+		70944D992E20410C00526319 /* BondDetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70944D982E20410C00526319 /* BondDetailService.swift */; };
+		70944D9B2E20452E00526319 /* BondDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70944D9A2E20452E00526319 /* BondDetailViewModel.swift */; };
+		70944D9D2E20458000526319 /* BondDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70944D9C2E20458000526319 /* BondDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +66,9 @@
 		70944D912E20319F00526319 /* BondListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BondListViewController.swift; sourceTree = "<group>"; };
 		70944D942E20365700526319 /* BondTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BondTableViewCell.swift; sourceTree = "<group>"; };
 		70944D962E2038B100526319 /* BondDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BondDetail.swift; sourceTree = "<group>"; };
+		70944D982E20410C00526319 /* BondDetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BondDetailService.swift; sourceTree = "<group>"; };
+		70944D9A2E20452E00526319 /* BondDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BondDetailViewModel.swift; sourceTree = "<group>"; };
+		70944D9C2E20458000526319 /* BondDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BondDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				70944D8A2E2030AD00526319 /* BondService.swift */,
+				70944D982E20410C00526319 /* BondDetailService.swift */,
 			);
 			path = ServiceHandler;
 			sourceTree = "<group>";
@@ -168,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				70944D8E2E20310C00526319 /* BondListViewModel.swift */,
+				70944D9A2E20452E00526319 /* BondDetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -176,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				70944D912E20319F00526319 /* BondListViewController.swift */,
+				70944D9C2E20458000526319 /* BondDetailViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -321,9 +330,12 @@
 			files = (
 				701F6AA82E200D60001F94F4 /* TapAssignment.xcdatamodeld in Sources */,
 				701F6AA22E200D60001F94F4 /* ViewController.swift in Sources */,
+				70944D992E20410C00526319 /* BondDetailService.swift in Sources */,
 				701F6A9E2E200D60001F94F4 /* AppDelegate.swift in Sources */,
 				70944D862E202EC300526319 /* Bond.swift in Sources */,
+				70944D9D2E20458000526319 /* BondDetailViewController.swift in Sources */,
 				70944D8B2E2030AD00526319 /* BondService.swift in Sources */,
+				70944D9B2E20452E00526319 /* BondDetailViewModel.swift in Sources */,
 				70944D922E20319F00526319 /* BondListViewController.swift in Sources */,
 				701F6AA02E200D60001F94F4 /* SceneDelegate.swift in Sources */,
 				70944D972E2038B100526319 /* BondDetail.swift in Sources */,
