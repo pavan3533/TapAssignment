@@ -19,7 +19,7 @@ class BondDetailViewModel {
     private(set) var bondDetail: BondDetail?
 
     func loadDetail() {
-        BondDetailService.shared.fetchBondDetail { [weak self] result in
+        BondDetailService().fetchBondDetail { [weak self] (result: Result<BondDetail, Error>) in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let detail):
@@ -32,9 +32,8 @@ class BondDetailViewModel {
         }
     }
 
-    // Helpers for formatted display (optional)
     var pros: [String] { bondDetail?.prosAndCons.pros ?? [] }
     var cons: [String] { bondDetail?.prosAndCons.cons ?? [] }
-    var revenueData: [MonthValue] { bondDetail?.financials.revenue ?? [] }
-    var ebitdaData: [MonthValue] { bondDetail?.financials.ebitda ?? [] }
+    var revenueData: [MonthlyData] { bondDetail?.financials.revenue ?? [] }
+    var ebitdaData: [MonthlyData] { bondDetail?.financials.ebitda ?? [] }
 }
