@@ -11,11 +11,11 @@ struct BondListItem: Decodable {
     let logo: String
     let isin: String
     let rating: String
-    let companyName: String
+    let issuerName: String
     let tags: [String]
 
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case logo, isin, rating, tags
-        case companyName = "company_name"
+        case issuerName = "company_name"
     }
 }

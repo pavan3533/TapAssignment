@@ -24,7 +24,7 @@ final class BondDetailViewModel {
     }
 
     func loadDetail() {
-        BondDetailService().fetchBondDetail { [weak self] result in
+        BondDetailService().fetchBondDetail(isin: isin) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let detail):
@@ -36,6 +36,7 @@ final class BondDetailViewModel {
             }
         }
     }
+
 
     var pros: [String] { bondDetail?.prosAndCons.pros ?? [] }
     var cons: [String] { bondDetail?.prosAndCons.cons ?? [] }

@@ -11,7 +11,7 @@ final class BondListService {
     private let url = URL(string: "https://eol122duf9sy4de.m.pipedream.net")!
 
     func fetchBondList(completion: @escaping (Result<[BondListItem], Error>) -> Void) {
-        let task = URLSession.shared.dataTask(with: url) { data, _, error in
+        URLSession.shared.dataTask(with: url) { data, _, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -23,12 +23,16 @@ final class BondListService {
             }
 
             do {
-                let root = try JSONDecoder().decode([String: [BondListItem]].self, from: data)
-                completion(.success(root["data"] ?? []))
+                let decoded = try JSONDecoder().decode(ResponseWrapper.self, from: data)
+                completion(.success(decoded.data))
             } catch {
                 completion(.failure(error))
             }
-        }
-        task.resume()
+        }.resume()
     }
 }
+
+private struct ResponseWrapper: Decodable {
+    let data: [BondListItem]
+}
+

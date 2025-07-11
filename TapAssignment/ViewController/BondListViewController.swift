@@ -49,20 +49,25 @@ final class BondListViewController: UIViewController {
 // MARK: - TableView
 extension BondListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.filteredBonds.count
+        viewModel.suggestedResults.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let bond = viewModel.filteredBonds[indexPath.row]
+        let bond = viewModel.suggestedResults[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: BondListCell.reuseID, for: indexPath) as! BondListCell
-        cell.configure(with: bond)
+        cell.configure(with: bond, highlight: searchBar.text)
         return cell
     }
 
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let bond = viewModel.filteredBonds[indexPath.row]
+        let bond = viewModel.suggestedResults[indexPath.row]
         let vc = BondDetailViewController(isin: bond.isin)
         navigationController?.pushViewController(vc, animated: true)
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return viewModel.suggestedResults.isEmpty ? nil : "Suggested Results"
     }
 }
 

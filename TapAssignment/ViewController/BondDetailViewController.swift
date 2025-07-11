@@ -11,7 +11,7 @@ import UIKit
 
 final class BondDetailViewController: UIViewController {
 
-    private let viewModel = BondDetailViewModel()
+    private let viewModel: BondDetailViewModel
 
     private let scrollView = UIScrollView()
     private let contentStack = UIStackView()
