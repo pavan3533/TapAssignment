@@ -9,58 +9,130 @@ import Foundation
 
 import UIKit
 
-class BondDetailViewController: UIViewController {
+final class BondDetailViewController: UIViewController {
+    private let isin: String
+    private let service = BondDetailService()
+    private var detail: BondDetail?
 
-    private let viewModel = BondDetailViewModel()
+    private let scrollView = UIScrollView()
+    private let contentStack = UIStackView()
+    private let logoView = UIImageView()
+    private let nameLabel = UILabel()
+    private let descLabel = UILabel()
+    private let tabSwitcher = TabSwitcherView()
+    private let chartView = BarChartView()
+    private let prosConsLabel = UILabel()
 
-    private let titleLabel = UILabel()
-    private let descriptionLabel = UILabel()
-    private let prosLabel = UILabel()
-    private let consLabel = UILabel()
+    init(isin: String) {
+        self.isin = isin
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
+        title = "Details"
         setupUI()
-        viewModel.delegate = self
-        viewModel.loadDetail()
+        fetchDetail()
     }
 
     private func setupUI() {
-        // Setup views (simplified)
-        [titleLabel, descriptionLabel, prosLabel, consLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview($0)
-        }
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
+        contentStack.axis = .vertical
+        contentStack.spacing = 16
+        contentStack.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentStack)
+
+        logoView.contentMode = .scaleAspectFit
+        logoView.layer.cornerRadius = 12
+        logoView.clipsToBounds = true
+        logoView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+
+        nameLabel.font = .boldSystemFont(ofSize: 20)
+        descLabel.numberOfLines = 0
+        descLabel.font = .systemFont(ofSize: 14)
+
+        prosConsLabel.numberOfLines = 0
+        prosConsLabel.font = .systemFont(ofSize: 14)
+
+        tabSwitcher.delegate = self
+        chartView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+
+        contentStack.addArrangedSubview(logoView)
+        contentStack.addArrangedSubview(nameLabel)
+        contentStack.addArrangedSubview(descLabel)
+        contentStack.addArrangedSubview(tabSwitcher)
+        contentStack.addArrangedSubview(chartView)
+        contentStack.addArrangedSubview(prosConsLabel)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
-            descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-
-            prosLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
-            prosLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-
-            consLabel.topAnchor.constraint(equalTo: prosLabel.bottomAnchor, constant: 20),
-            consLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
+            contentStack.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ])
     }
-}
 
-extension BondDetailViewController: BondDetailViewModelDelegate {
-    func didLoadBondDetail() {
-        guard let detail = viewModel.bondDetail else { return }
-        titleLabel.text = detail.companyName
-        descriptionLabel.text = detail.description
-
-        prosLabel.text = "Pros:\n" + viewModel.pros.joined(separator: "\n• ")
-        consLabel.text = "Cons:\n" + viewModel.cons.joined(separator: "\n• ")
+    private func fetchDetail() {
+        service.fetchBondDetail { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let detail):
+                    self?.detail = detail
+                    self?.render(detail: detail)
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
+        }
     }
 
-    func didFail(_ error: String) {
-        print("Failed to load detail:", error)
+    private func render(detail: BondDetail) {
+        nameLabel.text = detail.companyName
+        descLabel.text = detail.description
+        if let url = URL(string: detail.logo) {
+            URLSession.shared.dataTask(with: url) { data, _, _ in
+                if let data = data {
+                    DispatchQueue.main.async {
+                        self.logoView.image = UIImage(data: data)
+                    }
+                }
+            }.resume()
+        }
+        showChart()
+    }
+
+    private func showChart() {
+        chartView.monthlyData = detail?.financials.ebitda ?? []
+        chartView.setNeedsDisplay()
+        chartView.isHidden = false
+        prosConsLabel.isHidden = true
+    }
+
+    private func showProsCons() {
+        let pros = detail?.prosAndCons.pros.joined(separator: "\n• ") ?? ""
+        let cons = detail?.prosAndCons.cons.joined(separator: "\n• ") ?? ""
+        prosConsLabel.text = "✅ Pros:\n• \(pros)\n\n❌ Cons:\n• \(cons)"
+        chartView.isHidden = true
+        prosConsLabel.isHidden = false
     }
 }
 
+extension BondDetailViewController: TabSwitcherDelegate {
+    func didSwitchToTab(index: Int) {
+        if index == 0 {
+            showChart()
+        } else {
+            showProsCons()
+        }
+    }
+}

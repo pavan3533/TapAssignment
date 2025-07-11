@@ -26,6 +26,8 @@
 		70944D992E20410C00526319 /* BondDetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70944D982E20410C00526319 /* BondDetailService.swift */; };
 		70944D9B2E20452E00526319 /* BondDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70944D9A2E20452E00526319 /* BondDetailViewModel.swift */; };
 		70944D9D2E20458000526319 /* BondDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70944D9C2E20458000526319 /* BondDetailViewController.swift */; };
+		70C72DC42E20D10000D060A9 /* TabSwitcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C72DC32E20D10000D060A9 /* TabSwitcherView.swift */; };
+		70C72DC82E20DABC00D060A9 /* BarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C72DC72E20DABC00D060A9 /* BarChartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +71,8 @@
 		70944D982E20410C00526319 /* BondDetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BondDetailService.swift; sourceTree = "<group>"; };
 		70944D9A2E20452E00526319 /* BondDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BondDetailViewModel.swift; sourceTree = "<group>"; };
 		70944D9C2E20458000526319 /* BondDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BondDetailViewController.swift; sourceTree = "<group>"; };
+		70C72DC32E20D10000D060A9 /* TabSwitcherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSwitcherView.swift; sourceTree = "<group>"; };
+		70C72DC72E20DABC00D060A9 /* BarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +123,7 @@
 		701F6A9C2E200D60001F94F4 /* TapAssignment */ = {
 			isa = PBXGroup;
 			children = (
+				70C72DC52E20D1B800D060A9 /* Views */,
 				70944D932E2031DB00526319 /* UI Components */,
 				70944D902E20315B00526319 /* ViewController */,
 				70944D8D2E2030E200526319 /* ViewModel */,
@@ -193,8 +198,25 @@
 			isa = PBXGroup;
 			children = (
 				70944D942E20365700526319 /* BondCell.swift */,
+				70C72DC32E20D10000D060A9 /* TabSwitcherView.swift */,
 			);
 			path = "UI Components";
+			sourceTree = "<group>";
+		};
+		70C72DC52E20D1B800D060A9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				70C72DC62E20D1C400D060A9 /* Chart */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		70C72DC62E20D1C400D060A9 /* Chart */ = {
+			isa = PBXGroup;
+			children = (
+				70C72DC72E20DABC00D060A9 /* BarChartView.swift */,
+			);
+			path = Chart;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,6 +352,7 @@
 			files = (
 				701F6AA82E200D60001F94F4 /* TapAssignment.xcdatamodeld in Sources */,
 				701F6AA22E200D60001F94F4 /* ViewController.swift in Sources */,
+				70C72DC82E20DABC00D060A9 /* BarChartView.swift in Sources */,
 				70944D992E20410C00526319 /* BondDetailService.swift in Sources */,
 				701F6A9E2E200D60001F94F4 /* AppDelegate.swift in Sources */,
 				70944D862E202EC300526319 /* BondListItem.swift in Sources */,
@@ -339,6 +362,7 @@
 				70944D922E20319F00526319 /* BondListViewController.swift in Sources */,
 				701F6AA02E200D60001F94F4 /* SceneDelegate.swift in Sources */,
 				70944D972E2038B100526319 /* BondDetail.swift in Sources */,
+				70C72DC42E20D10000D060A9 /* TabSwitcherView.swift in Sources */,
 				70944D8F2E20310C00526319 /* BondListViewModel.swift in Sources */,
 				70944D952E20365700526319 /* BondCell.swift in Sources */,
 			);
