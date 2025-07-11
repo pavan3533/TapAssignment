@@ -35,6 +35,15 @@ final class BondDetailViewController: UIViewController {
         setupLayout()
         viewModel.loadDetail()
     }
+    
+    init(isin: String) {
+        self.viewModel = BondDetailViewModel(isin: isin)
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     private func setupLayout() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false

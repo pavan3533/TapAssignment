@@ -12,14 +12,19 @@ protocol BondDetailViewModelDelegate: AnyObject {
     func didFail(_ error: String)
 }
 
-class BondDetailViewModel {
+final class BondDetailViewModel {
 
     weak var delegate: BondDetailViewModelDelegate?
 
+    private let isin: String
     private(set) var bondDetail: BondDetail?
 
+    init(isin: String) {
+        self.isin = isin
+    }
+
     func loadDetail() {
-        BondDetailService().fetchBondDetail { [weak self] (result: Result<BondDetail, Error>) in
+        BondDetailService().fetchBondDetail { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let detail):
