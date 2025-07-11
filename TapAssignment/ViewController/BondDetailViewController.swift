@@ -10,10 +10,9 @@ import Foundation
 import UIKit
 
 final class BondDetailViewController: UIViewController {
-    private let isin: String
-    private let service = BondDetailService()
-    private var detail: BondDetail?
 
+    private let viewModel = BondDetailViewModel()
+    
     private let scrollView = UIScrollView()
     private let contentStack = UIStackView()
     private let logoView = UIImageView()
@@ -23,21 +22,13 @@ final class BondDetailViewController: UIViewController {
     private let chartView = BarChartView()
     private let prosConsLabel = UILabel()
 
-    init(isin: String) {
-        self.isin = isin
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.delegate = self
         view.backgroundColor = .systemBackground
         title = "Details"
         setupUI()
-        fetchDetail()
+        viewModel.loadDetail()
     }
 
     private func setupUI() {
@@ -82,21 +73,8 @@ final class BondDetailViewController: UIViewController {
         ])
     }
 
-    private func fetchDetail() {
-        service.fetchBondDetail { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let detail):
-                    self?.detail = detail
-                    self?.render(detail: detail)
-                case .failure(let error):
-                    print("Error: \(error)")
-                }
-            }
-        }
-    }
-
-    private func render(detail: BondDetail) {
+    private func renderDetail() {
+        guard let detail = viewModel.bondDetail else { return }
         nameLabel.text = detail.companyName
         descLabel.text = detail.description
         if let url = URL(string: detail.logo) {
@@ -108,25 +86,25 @@ final class BondDetailViewController: UIViewController {
                 }
             }.resume()
         }
-        showChart()
     }
 
     private func showChart() {
-        chartView.monthlyData = detail?.financials.ebitda ?? []
+        chartView.monthlyData = viewModel.ebitdaData
         chartView.setNeedsDisplay()
         chartView.isHidden = false
         prosConsLabel.isHidden = true
     }
 
     private func showProsCons() {
-        let pros = detail?.prosAndCons.pros.joined(separator: "\n• ") ?? ""
-        let cons = detail?.prosAndCons.cons.joined(separator: "\n• ") ?? ""
+        let pros = viewModel.pros.joined(separator: "\n• ")
+        let cons = viewModel.cons.joined(separator: "\n• ")
         prosConsLabel.text = "✅ Pros:\n• \(pros)\n\n❌ Cons:\n• \(cons)"
         chartView.isHidden = true
         prosConsLabel.isHidden = false
     }
 }
 
+// MARK: - Tab Switcher Delegate
 extension BondDetailViewController: TabSwitcherDelegate {
     func didSwitchToTab(index: Int) {
         if index == 0 {
@@ -134,5 +112,19 @@ extension BondDetailViewController: TabSwitcherDelegate {
         } else {
             showProsCons()
         }
+    }
+}
+
+// MARK: - ViewModel Delegate
+extension BondDetailViewController: BondDetailViewModelDelegate {
+    func didLoadBondDetail() {
+        renderDetail()
+        showChart() // default tab
+    }
+
+    func didFail(_ error: String) {
+        let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 }
